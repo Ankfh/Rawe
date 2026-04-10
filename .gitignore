@@ -1,0 +1,44 @@
+# Dependencies
+app/node_modules/
+backend/node_modules/
+python-backend/.venv/
+python-backend/venv/
+
+# JavaScript / React Native
+app/.expo/
+app/.idea/
+app/.gradle/
+app/android/.gradle/
+app/android/app/build/
+app/android/app/.cxx/
+app/android/build/
+app/ios/build/
+app/ios/Pods/
+
+# Backend uploads
+backend/uploads/
+
+# Python
+python-backend/__pycache__/
+python-backend/*.pyc
+python-backend/.pytest_cache/
+python-backend/.mypy_cache/
+
+# Environment files
+.env
+.env.*
+backend/.env
+app/.env
+python-backend/.env
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
