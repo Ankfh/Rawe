@@ -41,22 +41,25 @@ const decodeCursor = cursor => {
   }
 };
 
-export const getBooksCursorPaginated = async ({ limit, cursor }) => {
+export const getBooksCursorPaginated = async ({ userId, limit, cursor }) => {
   const parsedLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
-  const query = {};
+  const query = { userId };
 
   if (cursor) {
     const decodedCursor = decodeCursor(cursor);
 
     query.$or = [
       {
+        userId,
         uploadedAt: { $lt: decodedCursor.uploadedAt },
       },
       {
+        userId,
         uploadedAt: decodedCursor.uploadedAt,
         _id: { $lt: decodedCursor.id },
       },
     ];
+    delete query.userId;
   }
 
   const records = await BookModel.find(query)

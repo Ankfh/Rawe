@@ -3,7 +3,7 @@ import { deleteBookById } from '../services/bookDeleteService.js';
 export const deleteBookController = async (req, res) => {
   try {
     const { bookId } = req.params;
-    const deletedBook = await deleteBookById(bookId);
+    const deletedBook = await deleteBookById({ bookId, userId: req.user.id });
 
     return res.status(200).json({
       success: true,
@@ -15,7 +15,7 @@ export const deleteBookController = async (req, res) => {
       },
     });
   } catch (error) {
-    if (error.statusCode === 400 || error.statusCode === 404) {
+    if (error.statusCode === 400 || error.statusCode === 403 || error.statusCode === 404) {
       return res.status(error.statusCode).json({
         success: false,
         message: error.message,

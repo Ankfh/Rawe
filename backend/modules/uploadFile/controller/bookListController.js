@@ -5,6 +5,7 @@ export const getBooksListController = async (req, res) => {
     const { limit = 5, cursor } = req.query;
 
     const result = await getBooksCursorPaginated({
+      userId: req.user.id,
       limit,
       cursor,
     });

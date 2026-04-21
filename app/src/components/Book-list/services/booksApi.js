@@ -1,4 +1,18 @@
 import { BASE_URL } from '../../../baseUrl/data/baseUrls';
+import { store } from '../../../store/store';
+
+const getAuthHeaders = () => {
+  const token = store.getState()?.auth?.accessToken;
+  const headers = {
+    Accept: 'application/json',
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
+};
 
 const parseErrorMessage = async response => {
   try {
@@ -20,9 +34,7 @@ export const fetchBooksPaginated = async ({ limit = 5, cursor = null }) => {
 
   const response = await fetch(`${BASE_URL}/api/upload-file/books?${params.toString()}`, {
     method: 'GET',
-    headers: {
-      Accept: 'application/json',
-    },
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
@@ -36,9 +48,7 @@ export const fetchBooksPaginated = async ({ limit = 5, cursor = null }) => {
 export const deleteBookById = async bookId => {
   const response = await fetch(`${BASE_URL}/api/upload-file/books/${bookId}`, {
     method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-    },
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {

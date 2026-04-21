@@ -1,5 +1,5 @@
-import { Platform } from 'react-native';
 import { BASE_URL } from '../../../baseUrl/data/baseUrls';
+import { store } from '../../../store/store';
 
 const parseErrorMessage = async response => {
   try {
@@ -12,14 +12,21 @@ const parseErrorMessage = async response => {
 
 export const uploadPdfFile = async file => {
   const formData = new FormData();
+  const token = store.getState()?.auth?.accessToken;
 
   formData.append('file', file);
 
+  const headers = {
+    Accept: 'application/json',
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   const response = await fetch(`${BASE_URL}/api/upload-file`, {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-    },
+    headers,
     body: formData,
   });
 

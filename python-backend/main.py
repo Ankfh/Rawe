@@ -1,31 +1,33 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-import os
 
-# Load environment variables
-load_dotenv()
+from modules.health.routes.health_routes import health_router
+from modules.vectorization.routes.vectorization_routes import vectorization_router
+from shared.config.settings import get_settings
 
-app = FastAPI(title="AI Book Reader Python API")
+settings = get_settings()
 
-# Configure CORS
+app = FastAPI(title=settings["service_name"])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 
 @app.get("/")
 async def root():
     return {"message": "AI Book Reader Python API is running..."}
 
-@app.get("/health")
-async def health_check():
-    return {"status": "healthy"}
+
+app.include_router(health_router)
+app.include_router(vectorization_router)
+
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+
+    uvicorn.run("main:app", host="0.0.0.0", port=settings["port"], reload=True)

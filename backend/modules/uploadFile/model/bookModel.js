@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const bookSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     originalName: {
       type: String,
       required: true,
@@ -28,12 +33,25 @@ const bookSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
+    processingStatus: {
+      type: String,
+      enum: ['pending', 'notified', 'failed'],
+      default: 'pending',
+    },
+    processingError: {
+      type: String,
+      default: null,
+      trim: true,
+    },
   },
   {
     timestamps: true,
     versionKey: false,
   }
 );
+
+bookSchema.index({ userId: 1, uploadedAt: -1, _id: -1 });
+bookSchema.index({ processingStatus: 1 });
 
 const BookModel = mongoose.models.Book || mongoose.model('Book', bookSchema);
 

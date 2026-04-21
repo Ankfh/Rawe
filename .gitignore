@@ -27,6 +27,7 @@ python-backend/.mypy_cache/
 # Environment files
 .env
 .env.*
+!.env.docker.example
 backend/.env
 app/.env
 python-backend/.env
