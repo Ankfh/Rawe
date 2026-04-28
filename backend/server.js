@@ -8,6 +8,7 @@ import session from 'express-session';
 import passport from 'passport';
 import uploadFileRoutes from './modules/uploadFile/routes/uploadFileRoutes.js';
 import authRoutes from './modules/auth/routes/authRoutes.js';
+import aiRoutes from './modules/ai/routes/aiRoutes.js';
 import { configurePassportGoogle } from './modules/auth/services/passportGoogleService.js';
 
 // Load environment variables
@@ -60,6 +61,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/upload-file', uploadFileRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Start Server
 const startServer = async () => {

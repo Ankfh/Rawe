@@ -24,6 +24,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
+      - ./python-backend:/app
       - ./backend/uploads:/app/uploads
     depends_on:
       mongodb:
@@ -42,6 +43,8 @@ services:
     ports:
       - "5000:5000"
     volumes:
+      - ./backend:/app
+      - /app/node_modules
       - ./backend/uploads:/app/uploads
     depends_on:
       mongodb:

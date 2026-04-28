@@ -3,6 +3,7 @@ import { createStaticNavigation } from '@react-navigation/native';
 import { useIsLoggedIn, useIsLoggedOut } from '../hooks/useAuth';
 import MainTabNavigator from './MainTabNavigator';
 import PublicNavigator from './PublicNavigator';
+import ReaderQAScreen from '../../features/QA/view/ReaderQAScreen';
 
 const RootStack = createNativeStackNavigator({
   screenOptions: {
@@ -16,6 +17,9 @@ const RootStack = createNativeStackNavigator({
     publicScreen: {
       screen: PublicNavigator,
       if: useIsLoggedOut,
+    },
+    ReaderQA: {
+      screen: ReaderQAScreen,
     },
   },
 });

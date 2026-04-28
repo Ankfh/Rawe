@@ -51,7 +51,7 @@ export const uploadFileController = async (req, res) => {
 
     const updatedBook = await updateBookProcessingStatus({
       bookId: persistedBook._id,
-      status: 'notified',
+      status: 'processing',
       processingError: null,
     });
 

@@ -4,11 +4,15 @@ import { uploadPdfMiddleware } from '../../../shared/uploadMidleware/services/up
 import { uploadFileController } from '../controller/uploadFileController.js';
 import { getBooksListController } from '../controller/bookListController.js';
 import { deleteBookController } from '../controller/deleteBookController.js';
+import { updateStatusController } from '../controller/updateStatusController.js';
 
 const uploadFileRoutes = express.Router();
 
 uploadFileRoutes.post('/', requireAuth, uploadPdfMiddleware, uploadFileController);
 uploadFileRoutes.get('/books', requireAuth, getBooksListController);
 uploadFileRoutes.delete('/books/:bookId', requireAuth, deleteBookController);
+
+// Status update (Internal call from Python AI engine)
+uploadFileRoutes.post('/status', updateStatusController);
 
 export default uploadFileRoutes;

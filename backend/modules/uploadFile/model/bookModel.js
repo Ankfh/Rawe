@@ -35,7 +35,7 @@ const bookSchema = new mongoose.Schema(
     },
     processingStatus: {
       type: String,
-      enum: ['pending', 'notified', 'failed'],
+      enum: ['pending', 'processing', 'completed', 'failed'],
       default: 'pending',
     },
     processingError: {

@@ -4,6 +4,8 @@ import { styles } from '../styles/BookCard.styles';
 import { formatFileSize } from '../../UploadFile/services/fileValidation';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
+import { useNavigation } from '@react-navigation/native';
+
 const formatDate = dateValue => {
   try {
     return new Date(dateValue).toLocaleString();
@@ -13,6 +15,21 @@ const formatDate = dateValue => {
 };
 
 const BookCard = ({ item, onDeletePress, isDeleting }) => {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    if (item.processingStatus === 'completed') {
+      navigation.navigate('ReaderQA', { 
+        bookId: item._id, 
+        bookTitle: item.originalName 
+      });
+    } else if (item.processingStatus === 'failed') {
+      Alert.alert('Processing Failed', 'Something went wrong during AI analysis. Please delete and re-upload.');
+    } else {
+      Alert.alert('AI Analysis', 'This book is still being processed. Please wait a moment.');
+    }
+  };
+
   const handleDeleteConfirm = () => {
     Alert.alert(
       'Delete Book',
@@ -32,9 +49,20 @@ const BookCard = ({ item, onDeletePress, isDeleting }) => {
   };
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity 
+      style={styles.card} 
+      onPress={handlePress} 
+      activeOpacity={0.9}
+    >
       <View style={styles.topRow}>
-        <Text style={styles.metaText}>Uploaded</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.metaText}>Uploaded</Text>
+          {item.processingStatus === 'completed' && (
+            <View style={[styles.badge, { backgroundColor: '#027A48', marginLeft: 8 }]}>
+              <Text style={styles.badgeText}>Ready</Text>
+            </View>
+          )}
+        </View>
         <View style={styles.badge}>
           <Text style={styles.badgeText}>PDF</Text>
         </View>
@@ -44,7 +72,6 @@ const BookCard = ({ item, onDeletePress, isDeleting }) => {
         {item.originalName}
       </Text>
 
-      <Text style={styles.valueText}>Stored: {item.storedName}</Text>
       <Text style={styles.valueText}>Size: {formatFileSize(item.size || 0)}</Text>
       <Text style={styles.metaText}>Uploaded At: {formatDate(item.uploadedAt)}</Text>
 
@@ -65,7 +92,7 @@ const BookCard = ({ item, onDeletePress, isDeleting }) => {
           )}
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

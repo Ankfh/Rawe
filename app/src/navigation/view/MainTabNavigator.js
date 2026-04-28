@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/AntDesign';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import AuthRoutes from '../routes/authRoutes';
 import React from 'react';
 
@@ -10,7 +10,7 @@ const MainTabNavigator = createBottomTabNavigator({
       const iconName = focused
         ? routeConfig?.activeIcon
         : routeConfig?.icon;
-      return <Ionicons name={iconName} size={size} color={color} />;
+      return <AntDesign name={iconName} size={size} color={color} />;
     },
     tabBarActiveTintColor: '#007AFF',
     tabBarInactiveTintColor: 'gray',
