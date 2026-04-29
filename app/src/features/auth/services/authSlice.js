@@ -4,7 +4,7 @@ const initialState = {
   isLogin: false,
   userData: null,
   accessToken: null,
-  authLoading: false,
+  authLoading: true,
 };
 
 export const authSlice = createSlice({
@@ -32,6 +32,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setSession, setToken, clearSession, setAuthLoading } = authSlice.actions;
+export const { setSession, setToken, clearSession, setAuthLoading } =
+  authSlice.actions;
 
 export default authSlice.reducer;

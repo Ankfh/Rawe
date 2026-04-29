@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { BASE_URL } from '../../../baseUrl/data/baseUrls';
@@ -21,6 +21,7 @@ const configureGoogleSignin = () => {
 const useGoogleAuth = () => {
   const dispatch = useDispatch();
   const isConfigured = useRef(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
     if (!isConfigured.current) {
@@ -32,6 +33,7 @@ const useGoogleAuth = () => {
 
   const startGoogleLogin = useCallback(async () => {
     console.log('[AUTH][APP][GOOGLE] Login flow started from UI.');
+    setIsLoggingIn(true);
     try {
       console.log('[AUTH][APP][GOOGLE] Checking Play Services.');
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
@@ -85,11 +87,14 @@ const useGoogleAuth = () => {
     } catch (error) {
       console.error(`[AUTH][APP][GOOGLE] Login flow failed: ${error.message}`);
       Alert.alert('Login Failed', error.message || 'Unable to complete Google sign-in. Please try again.');
+    } finally {
+      setIsLoggingIn(false);
     }
   }, []);
 
   return {
     startGoogleLogin,
+    isLoggingIn,
   };
 };
 

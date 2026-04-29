@@ -9,15 +9,15 @@ export const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#0F172A',
     borderRadius: 16,
     padding: 18,
     borderWidth: 1,
-    borderColor: '#E5E5EA',
+    borderColor: '#334155',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
     elevation: 4,
   },
   details: {
@@ -27,18 +27,18 @@ export const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: '#F8FAFC',
     letterSpacing: 0.3,
   },
   size: {
     fontSize: 13,
-    color: '#8E8E93',
+    color: '#94A3B8',
     marginTop: 6,
     fontWeight: '500',
   },
   removeBtn: {
     padding: 8,
     borderRadius: 20,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: '#2D1518',
   },
 });

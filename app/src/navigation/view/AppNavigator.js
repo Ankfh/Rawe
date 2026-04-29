@@ -1,9 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStaticNavigation } from '@react-navigation/native';
-import { useIsLoggedIn, useIsLoggedOut } from '../hooks/useAuth';
+import { useIsAdmin, useIsLoggedIn, useIsLoggedOut } from '../hooks/useAuth';
 import MainTabNavigator from './MainTabNavigator';
 import PublicNavigator from './PublicNavigator';
-import ReaderQAScreen from '../../features/QA/view/ReaderQAScreen';
+import AdminNavigation from './AdminNavigation';
+import PrivateNavigation from './PrivateNavigation';
 
 const RootStack = createNativeStackNavigator({
   screenOptions: {
@@ -18,8 +19,14 @@ const RootStack = createNativeStackNavigator({
       screen: PublicNavigator,
       if: useIsLoggedOut,
     },
-    ReaderQA: {
-      screen: ReaderQAScreen,
+    privateScreen: {
+      screen: PrivateNavigation,
+      if: useIsLoggedIn,
+    },
+
+    adminScreen: {
+      screen: AdminNavigation,
+      if: useIsAdmin,
     },
   },
 });

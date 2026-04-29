@@ -1,25 +1,28 @@
 import HomeNavigator from '../../features/Home/view/HomeNavigator';
-import AboutView from "../../features/About/view/AboutView";
+import AboutView from '../../features/About/view/AboutView';
 import ProfileNavigator from '../../features/Profile/view/ProfileNavigator';
 
 const AuthRoutes = [
   {
-    name: "Home",
+    name: 'Home',
     component: HomeNavigator,
-    icon: "home",
-    activeIcon: "home",
+    icon: 'home',
+    activeIcon: 'home',
+    headerShown: false,
   },
   {
-    name: "About",
+    name: 'About',
     component: AboutView,
-    icon: "infocirlceo",
-    activeIcon: "infocirlce",
+    icon: 'infocirlceo',
+    activeIcon: 'infocirlce',
+    headerShown: true,
   },
   {
     name: 'Profile',
     component: ProfileNavigator,
     icon: 'user',
     activeIcon: 'user',
+    headerShown: true,
   },
 ];
 

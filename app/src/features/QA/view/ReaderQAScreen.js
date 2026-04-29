@@ -8,7 +8,8 @@ import {
   KeyboardAvoidingView, 
   Platform,
   ActivityIndicator,
-  Alert
+  Alert,
+  StyleSheet
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -22,8 +23,7 @@ import {
   selectQAStatus 
 } from '../services/qaSlice';
 import { askQuestionApi } from '../services/qaApi';
-import { GlassTheme, commonStyles } from '../styles/GlassTheme';
-import { StyleSheet } from 'react-native';
+import { useTheme } from '../../../components/Theme/ThemeContext';
 
 const ReaderQAScreen = () => {
   const [input, setInput] = useState('');
@@ -31,6 +31,7 @@ const ReaderQAScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { bookId, bookTitle } = route.params;
+  const { theme } = useTheme();
   
   const messages = useSelector(selectMessages);
   const { isLoading } = useSelector(selectQAStatus);
@@ -73,9 +74,14 @@ const ReaderQAScreen = () => {
       <View style={[
         styles.bubble,
         isUser ? styles.userBubble : styles.aiBubble,
-        commonStyles.shadow
       ]}>
-        <Text style={styles.messageText}>{item.content}</Text>
+        {!isUser && (
+          <View style={styles.aiLabel}>
+            <AntDesign name="robot" size={12} color={theme.colors.textAccent} />
+            <Text style={styles.aiLabelText}>AI Assistant</Text>
+          </View>
+        )}
+        <Text style={[styles.messageText, isUser && styles.userMessageText]}>{item.content}</Text>
       </View>
     );
   };
@@ -84,14 +90,23 @@ const ReaderQAScreen = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name="arrowleft" size={24} color={GlassTheme.colors.textPrimary} />
+        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+          <AntDesign name="arrowleft" size={20} color={theme.colors.textPrimary} />
         </TouchableOpacity>
         <View style={styles.headerInfo}>
           <Text style={styles.headerTitle} numberOfLines={1}>{bookTitle}</Text>
-          <Text style={styles.headerSubtitle}>AI Assistant</Text>
+          <Text style={styles.headerSubtitle}>AI Book Assistant</Text>
         </View>
       </View>
+
+      {/* Empty State */}
+      {messages.length === 0 && (
+        <View style={styles.emptyState}>
+          <AntDesign name="book" size={48} color="#334155" />
+          <Text style={styles.emptyTitle}>Ask anything about your book</Text>
+          <Text style={styles.emptySubtitle}>The AI will answer based on the book's content</Text>
+        </View>
+      )}
 
       {/* Chat List */}
       <FlatList
@@ -112,7 +127,7 @@ const ReaderQAScreen = () => {
           <TextInput
             style={styles.input}
             placeholder="Ask anything about the book..."
-            placeholderTextColor={GlassTheme.colors.textSecondary}
+            placeholderTextColor="#64748B"
             value={input}
             onChangeText={setInput}
             multiline
@@ -137,85 +152,148 @@ const ReaderQAScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: GlassTheme.colors.background[0],
+    backgroundColor: '#0F172A',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 60,
-    paddingBottom: 20,
-    paddingHorizontal: GlassTheme.spacing.m,
-    backgroundColor: GlassTheme.colors.glassBackground,
+    paddingTop: 50,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
+    backgroundColor: '#1E293B',
     borderBottomWidth: 1,
-    borderBottomColor: GlassTheme.colors.border,
+    borderBottomColor: '#334155',
+  },
+  backBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: '#0F172A',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#334155',
   },
   headerInfo: {
-    marginLeft: GlassTheme.spacing.m,
+    marginLeft: 14,
     flex: 1,
   },
   headerTitle: {
-    color: GlassTheme.colors.textPrimary,
+    color: '#F8FAFC',
     fontSize: 18,
     fontWeight: '700',
   },
   headerSubtitle: {
-    color: GlassTheme.colors.textSecondary,
+    color: '#64748B',
     fontSize: 12,
+    marginTop: 2,
+  },
+  emptyState: {
+    position: 'absolute',
+    top: '35%',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  emptyTitle: {
+    color: '#475569',
+    fontSize: 18,
+    fontWeight: '700',
+    marginTop: 16,
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    color: '#334155',
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: 'center',
   },
   listContent: {
-    padding: GlassTheme.spacing.m,
+    padding: 16,
     paddingBottom: 40,
   },
   bubble: {
-    padding: GlassTheme.spacing.m,
-    borderRadius: GlassTheme.roundness.l,
-    marginBottom: GlassTheme.spacing.m,
+    padding: 16,
+    borderRadius: 18,
+    marginBottom: 12,
     maxWidth: '85%',
   },
   userBubble: {
     alignSelf: 'flex-end',
-    backgroundColor: GlassTheme.colors.userBubble[0],
+    backgroundColor: '#4F46E5',
+    borderBottomRightRadius: 6,
+    shadowColor: '#4F46E5',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
   },
   aiBubble: {
     alignSelf: 'flex-start',
-    backgroundColor: GlassTheme.colors.aiBubble,
+    backgroundColor: '#1E293B',
     borderWidth: 1,
-    borderColor: GlassTheme.colors.border,
+    borderColor: '#334155',
+    borderBottomLeftRadius: 6,
+  },
+  aiLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  aiLabelText: {
+    color: '#38BDF8',
+    fontSize: 11,
+    fontWeight: '700',
+    marginLeft: 6,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   messageText: {
-    color: '#FFF',
+    color: '#CBD5E1',
     fontSize: 15,
     lineHeight: 22,
   },
+  userMessageText: {
+    color: '#FFFFFF',
+  },
   inputContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: GlassTheme.colors.glassBackground,
-    padding: GlassTheme.spacing.m,
-    paddingBottom: Platform.OS === 'ios' ? 30 : GlassTheme.spacing.m,
+    alignItems: 'flex-end',
+    backgroundColor: '#1E293B',
+    padding: 12,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 12,
     borderTopWidth: 1,
-    borderTopColor: GlassTheme.colors.border,
+    borderTopColor: '#334155',
   },
   input: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: GlassTheme.roundness.pill,
-    paddingHorizontal: GlassTheme.spacing.m,
-    paddingVertical: 10,
-    color: '#FFF',
-    marginRight: GlassTheme.spacing.m,
+    backgroundColor: '#0F172A',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    color: '#F8FAFC',
+    marginRight: 10,
     maxHeight: 120,
+    borderWidth: 1,
+    borderColor: '#334155',
+    fontSize: 15,
   },
   sendButton: {
-    backgroundColor: GlassTheme.colors.userBubble[0],
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    backgroundColor: '#4F46E5',
+    width: 46,
+    height: 46,
+    borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#4F46E5',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 5,
   },
   sendButtonDisabled: {
-    opacity: 0.5,
+    opacity: 0.4,
   }
 });
 

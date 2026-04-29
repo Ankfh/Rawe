@@ -5,13 +5,17 @@ import { Provider } from 'react-redux';
 import { store } from './src/store/store';
 import RoutesContainer from './src/navigation/services/RoutesContainer';
 
+import { ThemeProvider } from './src/components/Theme/ThemeContext';
+
 function App() {
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
-        <StatusBar barStyle="dark-content" />
-        <RoutesContainer />
-      </SafeAreaProvider>
+      <ThemeProvider>
+        <SafeAreaProvider>
+          <StatusBar barStyle="light-content" backgroundColor="#0F172A" />
+          <RoutesContainer />
+        </SafeAreaProvider>
+      </ThemeProvider>
     </Provider>
   );
 }

@@ -10,55 +10,59 @@ import {
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import useProfileScreen from '../hooks/useProfileScreen';
+import { useTheme } from '../../../components/Theme/ThemeContext';
 
 const ProfileView = () => {
   const { profile, confirmLogout, isLoggingOut } = useProfileScreen();
+  const { theme } = useTheme();
   const hasAvatar = Boolean(profile.avatar);
 
+  const dynamicStyles = getStyles(theme);
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F2F6FB" />
-      <View style={styles.container}>
-        <View style={styles.backgroundBubbleOne} />
-        <View style={styles.backgroundBubbleTwo} />
+    <SafeAreaView style={dynamicStyles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor={theme.colors.backgroundMain} />
+      <View style={dynamicStyles.container}>
+        <View style={dynamicStyles.backgroundBubbleOne} />
+        <View style={dynamicStyles.backgroundBubbleTwo} />
 
-        <View style={styles.headerCard}>
-          <Text style={styles.sectionLabel}>Profile</Text>
-          <Text style={styles.heading}>Your Account</Text>
-          <Text style={styles.subheading}>Manage your identity and session</Text>
+        <View style={dynamicStyles.headerCard}>
+          <Text style={dynamicStyles.sectionLabel}>Profile</Text>
+          <Text style={dynamicStyles.heading}>Your Account</Text>
+          <Text style={dynamicStyles.subheading}>Manage your identity and session</Text>
 
-          <View style={styles.avatarRow}>
-            <View style={styles.avatarShell}>
+          <View style={dynamicStyles.avatarRow}>
+            <View style={dynamicStyles.avatarShell}>
               {hasAvatar ? (
-                <Image source={{ uri: profile.avatar }} style={styles.avatarImage} resizeMode="cover" />
+                <Image source={{ uri: profile.avatar }} style={dynamicStyles.avatarImage} resizeMode="cover" />
               ) : (
-                <Text style={styles.avatarFallbackText}>{profile.initials}</Text>
+                <Text style={dynamicStyles.avatarFallbackText}>{profile.initials}</Text>
               )}
             </View>
 
-            <View style={styles.userMetaBlock}>
-              <Text style={styles.userName} numberOfLines={1}>
+            <View style={dynamicStyles.userMetaBlock}>
+              <Text style={dynamicStyles.userName} numberOfLines={1}>
                 {profile.name}
               </Text>
-              <Text style={styles.userEmail} numberOfLines={1}>
+              <Text style={dynamicStyles.userEmail} numberOfLines={1}>
                 {profile.email}
               </Text>
             </View>
           </View>
         </View>
 
-        <View style={styles.actionsCard}>
-          <Text style={styles.actionsTitle}>Security</Text>
+        <View style={dynamicStyles.actionsCard}>
+          <Text style={dynamicStyles.actionsTitle}>Security</Text>
           <TouchableOpacity
-            style={styles.logoutButton}
+            style={dynamicStyles.logoutButton}
             onPress={confirmLogout}
             disabled={isLoggingOut}
             activeOpacity={0.85}
           >
-            <View style={styles.logoutIconWrap}>
-              <AntDesign name="logout" size={16} color="#ffffff" />
+            <View style={dynamicStyles.logoutIconWrap}>
+              <AntDesign name="logout" size={16} color={theme.colors.danger} />
             </View>
-            <Text style={styles.logoutButtonText}>{isLoggingOut ? 'Signing out...' : 'Logout'}</Text>
+            <Text style={dynamicStyles.logoutButtonText}>{isLoggingOut ? 'Signing out...' : 'Logout'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -66,65 +70,66 @@ const ProfileView = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme) => StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F2F6FB',
+    backgroundColor: theme.colors.backgroundMain,
   },
   container: {
     flex: 1,
     paddingHorizontal: 18,
     paddingTop: 12,
     paddingBottom: 20,
-    backgroundColor: '#F2F6FB',
+    backgroundColor: theme.colors.backgroundMain,
   },
   backgroundBubbleOne: {
     position: 'absolute',
-    width: 210,
-    height: 210,
-    borderRadius: 105,
-    backgroundColor: '#D9EEFF',
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: theme.colors.primary,
+    opacity: 0.1,
     top: -60,
-    right: -60,
+    right: -80,
   },
   backgroundBubbleTwo: {
     position: 'absolute',
-    width: 170,
-    height: 170,
-    borderRadius: 85,
-    backgroundColor: '#E8FFE8',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: theme.colors.accent,
+    opacity: 0.1,
     bottom: 30,
     left: -65,
   },
   headerCard: {
-    backgroundColor: '#0B1D33',
-    borderRadius: 24,
+    ...theme.glassStyles.card,
     paddingVertical: 24,
     paddingHorizontal: 18,
     marginTop: 14,
-    shadowColor: '#000000',
+    shadowColor: theme.colors.primary,
     shadowOpacity: 0.2,
-    shadowRadius: 14,
+    shadowRadius: 20,
     shadowOffset: { width: 0, height: 10 },
     elevation: 7,
   },
   sectionLabel: {
     fontSize: 13,
-    color: '#A8C8E8',
+    color: theme.colors.textAccent,
     fontWeight: '700',
-    letterSpacing: 0.4,
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
   },
   heading: {
     marginTop: 8,
     fontSize: 28,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
   },
   subheading: {
     marginTop: 6,
     fontSize: 14,
-    color: '#C7DAEF',
+    color: theme.colors.textSecondary,
   },
   avatarRow: {
     marginTop: 22,
@@ -135,9 +140,9 @@ const styles = StyleSheet.create({
     width: 86,
     height: 86,
     borderRadius: 43,
-    backgroundColor: '#123A63',
+    backgroundColor: theme.colors.backgroundSecondary,
     borderWidth: 3,
-    borderColor: '#52A7FF',
+    borderColor: theme.colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
@@ -147,7 +152,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   avatarFallbackText: {
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
     fontSize: 30,
     fontWeight: '800',
   },
@@ -157,51 +162,52 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 22,
-    color: '#FFFFFF',
+    color: theme.colors.textPrimary,
     fontWeight: '800',
   },
   userEmail: {
     marginTop: 5,
-    color: '#ADD3FB',
+    color: theme.colors.textSecondary,
     fontSize: 14,
     fontWeight: '500',
   },
   actionsCard: {
-    marginTop: 20,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#E0EAF4',
+    marginTop: 24,
+    ...theme.glassStyles.card,
+    padding: 18,
   },
   actionsTitle: {
     fontSize: 16,
-    color: '#183B56',
+    color: theme.colors.textPrimary,
     fontWeight: '800',
-    marginBottom: 12,
+    marginBottom: 16,
+    letterSpacing: 0.5,
   },
   logoutButton: {
-    backgroundColor: '#E53935',
+    backgroundColor: theme.colors.dangerBackground,
     borderRadius: 14,
-    minHeight: 50,
+    minHeight: 55,
     paddingHorizontal: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.3)',
   },
   logoutIconWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#B61B1B',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 9,
+    marginRight: 10,
   },
   logoutButtonText: {
-    color: '#FFFFFF',
+    color: theme.colors.danger,
     fontSize: 16,
     fontWeight: '700',
+    letterSpacing: 0.5,
   },
 });
 

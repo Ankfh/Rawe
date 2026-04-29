@@ -4,27 +4,39 @@ import { useNavigation } from '@react-navigation/native';
 import BookListMainView from '../../../components/Book-list/view/BookListMainView';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import useLogout from '../../auth/hooks/useLogout';
+import { useTheme } from '../../../components/Theme/ThemeContext';
 
 const HomeView = () => {
   const navigation = useNavigation();
   const { confirmLogout, isLoggingOut } = useLogout();
+  const { theme } = useTheme();
 
   const navigateToUpload = () => {
-    navigation.navigate('UploadBook');
+    navigation.navigate('privateScreen', { screen: 'UploadBook' });
   };
 
+  const dynamicStyles = getStyles(theme);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.headerSection}>
-        <View style={styles.topRow}>
-          <Text style={styles.text}>AI Book Reader</Text>
-          <TouchableOpacity onPress={confirmLogout} disabled={isLoggingOut} style={styles.logoutButton}>
-            <Text style={styles.logoutButtonText}>{isLoggingOut ? '...' : 'Logout'}</Text>
-          </TouchableOpacity>
+    <View style={dynamicStyles.container}>
+      <View style={dynamicStyles.headerSection}>
+        <View style={dynamicStyles.topRow}>
+          {/* <Text style={dynamicStyles.text}>AI Book Reader</Text> */}
+          {/* <TouchableOpacity onPress={confirmLogout} disabled={isLoggingOut} style={dynamicStyles.logoutButton}>
+            <Text style={dynamicStyles.logoutButtonText}>{isLoggingOut ? '...' : 'Logout'}</Text>
+          </TouchableOpacity> */}
         </View>
-        <TouchableOpacity style={styles.uploadButton} onPress={navigateToUpload} activeOpacity={0.85}>
-          <AntDesign name="clouduploado" size={18} color="#FFFFFF" />
-          <Text style={styles.uploadButtonText}>Upload Book</Text>
+        <TouchableOpacity
+          style={dynamicStyles.uploadButton}
+          onPress={navigateToUpload}
+          activeOpacity={0.85}
+        >
+          <AntDesign
+            name="clouduploado"
+            size={18}
+            color={theme.colors.textPrimary}
+          />
+          <Text style={dynamicStyles.uploadButtonText}>Upload Book</Text>
         </TouchableOpacity>
       </View>
 
@@ -33,54 +45,66 @@ const HomeView = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F8FC',
-  },
-  headerSection: {
-    paddingTop: 20,
-    paddingHorizontal: 14,
-    paddingBottom: 10,
-  },
-  topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#102A43',
-    marginBottom: 10,
-  },
-  logoutButton: {
-    backgroundColor: '#E8EEF5',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  logoutButtonText: {
-    color: '#334E68',
-    fontWeight: '700',
-    fontSize: 13,
-  },
-  uploadButton: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#0F6CBD',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  uploadButtonText: {
-    marginLeft: 8,
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-});
+const getStyles = theme =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.backgroundMain,
+    },
+    headerSection: {
+      paddingTop: 30,
+      paddingHorizontal: 16,
+      paddingBottom: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.glassBorder,
+      backgroundColor: theme.colors.backgroundSecondary,
+    },
+    topRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    text: {
+      fontSize: 26,
+      fontWeight: '800',
+      color: theme.colors.textPrimary,
+      marginBottom: 10,
+      letterSpacing: 0.5,
+    },
+    logoutButton: {
+      backgroundColor: theme.colors.glassBackground,
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: theme.colors.glassBorder,
+      marginBottom: 10,
+    },
+    logoutButtonText: {
+      color: theme.colors.textSecondary,
+      fontWeight: '700',
+      fontSize: 13,
+    },
+    uploadButton: {
+      alignSelf: 'flex-start',
+      ...theme.glassStyles.button,
+      paddingHorizontal: 18,
+      paddingVertical: 12,
+      flexDirection: 'row',
+      alignItems: 'center',
+      shadowColor: theme.colors.primary,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 8,
+      elevation: 5,
+    },
+    uploadButtonText: {
+      marginLeft: 8,
+      color: theme.colors.textPrimary,
+      fontSize: 15,
+      fontWeight: '700',
+      letterSpacing: 0.5,
+    },
+  });
 
 export default HomeView;
