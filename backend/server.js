@@ -9,6 +9,7 @@ import passport from 'passport';
 import uploadFileRoutes from './modules/uploadFile/routes/uploadFileRoutes.js';
 import authRoutes from './modules/auth/routes/authRoutes.js';
 import aiRoutes from './modules/ai/routes/aiRoutes.js';
+import adminRoutes from './modules/admin/routes/adminRoutes.js';
 import { configurePassportGoogle } from './modules/auth/services/passportGoogleService.js';
 
 // Load environment variables
@@ -62,6 +63,7 @@ app.get('/', (req, res) => {
 app.use('/api/upload-file', uploadFileRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Start Server
 const startServer = async () => {

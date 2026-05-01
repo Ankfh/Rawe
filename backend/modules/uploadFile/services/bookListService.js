@@ -86,3 +86,8 @@ export const getBooksCursorPaginated = async ({ userId, limit, cursor }) => {
     },
   };
 };
+
+export const countBooksByUserId = async userId => {
+  return await BookModel.countDocuments({ userId });
+};
+

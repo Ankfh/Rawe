@@ -37,7 +37,9 @@ const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 10 * 1024 * 1024,
+    // Set to absolute system max (500MB). 
+    // Specific dynamic enforcement is handled in uploadFileController.js
+    fileSize: 500 * 1024 * 1024,
   },
 });
 

@@ -3,6 +3,7 @@ import AboutView from '../../features/About/view/AboutView';
 import ProfileNavigator from '../../features/Profile/view/ProfileNavigator';
 import AdminSettingView from '../../components/adminSettings/view/AdminSettingView';
 import { useIsAdmin } from '../hooks/useAuth';
+import AdminView from '../../features/admin/view/AdminView';
 
 const AuthRoutes = [
   {
@@ -28,11 +29,11 @@ const AuthRoutes = [
   },
   {
     name: 'Admin',
-    component: AdminSettingView,
+    component: AdminView,
     icon: 'setting',
     activeIcon: 'setting',
     headerShown: true,
-    if: useIsAdmin,
+    isAdmin: useIsAdmin,
   },
 ];
 
