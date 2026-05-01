@@ -13,6 +13,7 @@ export const authSlice = createSlice({
   reducers: {
     setSession: (state, action) => {
       const { token, user } = action.payload || {};
+      console.log(user, '+++helloo+++');
       state.accessToken = token || null;
       state.userData = user || null;
       state.isLogin = Boolean(token && user);

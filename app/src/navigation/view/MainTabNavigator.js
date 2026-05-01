@@ -57,6 +57,7 @@ const MainTabNavigator = createBottomTabNavigator({
     acc[route.name] = {
       screen: route.component,
       options: { title: route.name, headerShown: route?.headerShown },
+      ...(route.if && { if: route.if }),
     };
     return acc;
   }, {}),

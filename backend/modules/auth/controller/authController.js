@@ -2,6 +2,7 @@ import { findUserById } from '../services/userAuthService.js';
 import { getCookieOptions, signAuthToken } from '../services/jwtService.js';
 import { verifyGoogleIdToken } from '../services/googleTokenVerificationService.js';
 import { findOrCreateGoogleUser } from '../services/userAuthService.js';
+import { checkIsAdmin } from '../services/adminService.js';
 
 const getMobileRedirectUrl = () => {
   return process.env.MOBILE_AUTH_SUCCESS_URL || 'aibookreader://auth-success';
@@ -55,6 +56,7 @@ export const handleGoogleAuthSuccess = (req, res) => {
         name: req.user.name,
         email: req.user.email,
         avatar: req.user.avatar,
+        is_admin: checkIsAdmin(req.user.email),
       },
     },
   });
@@ -92,6 +94,7 @@ export const handleGoogleMobileLogin = async (req, res) => {
           name: user.name,
           email: user.email,
           avatar: user.avatar,
+          is_admin: checkIsAdmin(user.email),
         },
       },
     });
@@ -130,6 +133,7 @@ export const getCurrentUserController = async (req, res) => {
           name: user.name,
           email: user.email,
           avatar: user.avatar,
+          is_admin: checkIsAdmin(user.email),
         },
       },
     });

@@ -4,7 +4,8 @@ const useAuth = () => {
   const { isLogin, userData, authLoading, accessToken } = useSelector(
     state => state.auth,
   );
-
+  console.log(userData, '++++++');
+  console.log(isLogin, '+++isLogin+++');
   return { isLogin, userData, authLoading, accessToken };
 };
 

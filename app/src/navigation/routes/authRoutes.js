@@ -1,6 +1,8 @@
 import HomeNavigator from '../../features/Home/view/HomeNavigator';
 import AboutView from '../../features/About/view/AboutView';
 import ProfileNavigator from '../../features/Profile/view/ProfileNavigator';
+import AdminSettingView from '../../components/adminSettings/view/AdminSettingView';
+import { useIsAdmin } from '../hooks/useAuth';
 
 const AuthRoutes = [
   {
@@ -23,6 +25,14 @@ const AuthRoutes = [
     icon: 'user',
     activeIcon: 'user',
     headerShown: true,
+  },
+  {
+    name: 'Admin',
+    component: AdminSettingView,
+    icon: 'setting',
+    activeIcon: 'setting',
+    headerShown: true,
+    if: useIsAdmin,
   },
 ];
 
