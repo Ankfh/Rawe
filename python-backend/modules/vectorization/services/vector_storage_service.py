@@ -57,4 +57,20 @@ class VectorStorageService:
             
         return index, chunks
 
+    def delete_index(self, book_id: str) -> bool:
+        """
+        Deletes the FAISS index and metadata for a specific book.
+        """
+        import shutil
+        book_dir = os.path.join(self.base_path, book_id)
+        if os.path.exists(book_dir):
+            try:
+                shutil.rmtree(book_dir)
+                print(f"[VERBOSE][AI][STORAGE] Deleted index and metadata for book {book_id}")
+                return True
+            except Exception as e:
+                print(f"[VERBOSE][AI][STORAGE] Error deleting index for book {book_id}: {str(e)}")
+                return False
+        return False
+
 vector_storage_service = VectorStorageService()

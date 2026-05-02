@@ -3,6 +3,7 @@ import path from 'path';
 import mongoose from 'mongoose';
 import BookModel from '../model/bookModel.js';
 import { uploadsDir } from '../../../shared/uploadMidleware/services/uploadMulterService.js';
+import { notifyPythonDeleteService } from './pythonDeleteNotificationService.js';
 
 export const deleteBookById = async ({ bookId, userId }) => {
   if (!mongoose.Types.ObjectId.isValid(bookId)) {
@@ -36,6 +37,11 @@ export const deleteBookById = async ({ bookId, userId }) => {
       throw error;
     }
   }
+
+  // 4. Notify Python backend to delete vectors (Background/Non-blocking)
+  notifyPythonDeleteService(bookId);
+
+  console.log(`[DELETE] Book ${bookId} removed from database and filesystem.`);
 
   return book;
 };
