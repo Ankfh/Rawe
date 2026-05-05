@@ -2,8 +2,6 @@ services:
   mongodb:
     image: mongo:7
     container_name: ai-book-reader-mongodb
-    ports:
-      - "27017:27017"
     environment:
       MONGO_INITDB_DATABASE: ${MONGO_DB}
     volumes:
@@ -18,11 +16,10 @@ services:
     build:
       context: .
       dockerfile: python-backend/Dockerfile
+    image: ashfaq357/keeb-paython-backend:latest
     container_name: ai-book-reader-python
     env_file:
-      - .env.docker
-    ports:
-      - "8000:8000"
+      - .env
     volumes:
       - ./python-backend:/app
       - ./backend/uploads:/app/uploads
@@ -34,14 +31,13 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    image: ashfaq357/ai-auth-backend:latest
     container_name: ai-book-reader-backend
     env_file:
-      - .env.docker
+      - .env
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    ports:
-      - "5000:5000"
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -54,3 +50,8 @@ services:
 
 volumes:
   mongo_data:
+
+networks:
+  default:
+    name: shared-proxy-net
+    external: true
